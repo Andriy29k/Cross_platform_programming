@@ -1,0 +1,107 @@
+package org.example;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.security.NoSuchProviderException;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class UserServiceTest {
+
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private AddressService addressService;
+
+    private UserService userService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
+        userService = new UserService(userRepository, addressService);
+    }
+
+    @Test
+    void getUserTest() throws NoSuchProviderException {
+        User testUser = new User();
+        testUser.setUserId(1);
+        testUser.setName("null");
+        testUser.setAge(20);
+        testUser.setEmail("jon@gmail.com");
+        testUser.setPhoneNumber("12234452");
+        Address testAddress = new Address();
+        testAddress.setAddressId(1);
+        testAddress.setCountry("Ukraine");
+        testAddress.setCity("Rivne");
+        testAddress.setStreet("T.Shevchenka");
+        testAddress.setBuilding("11");
+        testUser.setAddress(testAddress);
+
+        when(userRepository.findUser(1)).thenReturn(testUser);
+        when(addressService.findAddress(1)).thenReturn(testUser.getAddress());
+
+        User resultUser = userService.getUser(1);
+
+        assertEquals(testUser, resultUser);
+        assertEquals(testUser.getAddress(), resultUser.getAddress());
+
+        verify(userRepository, times(1)).findUser(1);
+        verify(addressService, times(1)).findAddress(1);
+    }
+
+    @Test
+    void deleteUserTest() throws NoSuchProviderException {
+        User testUser = new User();
+
+        testUser.setUserId(1);
+        testUser.setName("null");
+        testUser.setAge(20);
+        testUser.setEmail("jon@gmail.com");
+        testUser.setPhoneNumber("12234452");
+        Address testAddress = new Address();
+        testAddress.setAddressId(1);
+        testAddress.setCountry("Ukraine");
+        testAddress.setCity("Rivne");
+        testAddress.setStreet("T.Shevchenka");
+        testAddress.setBuilding("11");
+        testUser.setAddress(testAddress);
+
+        when(userRepository.findUser(1)).thenReturn(testUser);
+        when(addressService.findAddress(1)).thenReturn(testUser.getAddress());
+
+        userService.deleteUser(1);
+
+        verify(userRepository, times(1)).findUser(1);
+        verify(addressService, times(1)).findAddress(1);
+        verify(userRepository, times(1)).deleteUser(1);
+    }
+
+    @Test
+    void сreateUserTest() throws NoSuchProviderException {
+
+        User testUser = new User();
+
+        testUser.setUserId(1);
+        testUser.setName("null");
+        testUser.setAge(20);
+        testUser.setEmail("jon@gmail.com");
+        testUser.setPhoneNumber("12234452");
+        Address testAddress = new Address();
+        testAddress.setAddressId(1);
+        testAddress.setCountry("Ukraine");
+        testAddress.setCity("Rivne");
+        testAddress.setStreet("T.Shevchenka");
+        testAddress.setBuilding("11");
+        testUser.setAddress(testAddress);
+
+        when(addressService.addAddress(testUser.getAddress())).thenReturn(testUser.getAddress());
+
+        assertThrows(IllegalArgumentException.class,
+                ()->userService.createUser(testUser));
+    }
+}
