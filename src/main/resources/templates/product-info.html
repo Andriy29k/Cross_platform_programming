@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product info</title>
+</head>
+<body>
+<b>Назва товару: </b> ${product.title}<br>
+<b>Назва товару: </b> ${product.description}<br>
+<b>Назва товару: </b> ${product.price}<br>
+<b>Назва товару: </b> ${product.city}<br>
+<b>Назва товару: </b> ${product.author}<br>
+<hr>
+<form action="/product/delete/${product.id}" method="post"/>
+    <input type="submit" value="Видалити товар"/>
+</body>
+</html>
