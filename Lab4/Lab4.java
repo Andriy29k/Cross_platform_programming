@@ -69,5 +69,27 @@ public class Lab4 {
         }
         System.out.println("Продовження роботи програми");
 
+        //add try-catch-finally
+        BufferedReader reader = null;
+
+        try {
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream("D:\\123\\Test.txt"), "UTF-8"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.err.println("IO Exception: " + e.getMessage());
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+                System.out.println("FileReader.");
+            } catch (IOException e) {
+                System.err.println("Помилка сталась при закритті файлу: " + e.getMessage());
+            }
+        }
+
     }
 }
